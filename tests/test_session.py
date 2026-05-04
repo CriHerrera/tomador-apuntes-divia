@@ -48,7 +48,28 @@ class SessionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "diapositiva"):
             session.set_current_slide(0)
 
+    def test_session_stores_transcript_segments_with_current_slide(self) -> None:
+        session = Session.create("Clase")
+        session.set_presentation("clase.pdf")
+        session.set_current_slide(2)
+
+        segment = session.add_transcript_segment(
+            text="este es un punto importante",
+            started_at_seconds=4,
+            ended_at_seconds=9,
+        )
+
+        self.assertEqual(segment.slide, 2)
+        self.assertEqual(segment.text, "este es un punto importante")
+        self.assertEqual(session.transcription_state, "capturando")
+        self.assertEqual(session.transcript_segments[0].id, segment.id)
+
+    def test_session_rejects_empty_transcript_segment(self) -> None:
+        session = Session.create("Clase")
+
+        with self.assertRaisesRegex(ValueError, "transcripcion"):
+            session.add_transcript_segment("", 0, 1)
+
 
 if __name__ == "__main__":
     unittest.main()
-

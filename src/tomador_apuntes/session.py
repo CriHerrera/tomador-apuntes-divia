@@ -56,6 +56,60 @@ class SessionEvent:
 
 
 @dataclass
+class TranscriptSegment:
+    id: str
+    text: str
+    started_at_seconds: float
+    ended_at_seconds: float
+    recorded_at: datetime
+    slide: int | None = None
+
+    @classmethod
+    def create(
+        cls,
+        text: str,
+        started_at_seconds: float,
+        ended_at_seconds: float,
+        slide: int | None = None,
+        recorded_at: datetime | None = None,
+    ) -> "TranscriptSegment":
+        clean_text = text.strip()
+        if not clean_text:
+            raise ValueError("El segmento de transcripcion no puede estar vacio.")
+        if ended_at_seconds < started_at_seconds:
+            raise ValueError("El fin del segmento no puede ser anterior al inicio.")
+        return cls(
+            id=str(uuid.uuid4()),
+            text=clean_text,
+            started_at_seconds=max(0, started_at_seconds),
+            ended_at_seconds=max(0, ended_at_seconds),
+            recorded_at=recorded_at or utc_now(),
+            slide=slide,
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "id": self.id,
+            "text": self.text,
+            "started_at_seconds": self.started_at_seconds,
+            "ended_at_seconds": self.ended_at_seconds,
+            "recorded_at": format_dt(self.recorded_at),
+            "slide": self.slide,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "TranscriptSegment":
+        return cls(
+            id=str(data["id"]),
+            text=str(data["text"]),
+            started_at_seconds=float(data.get("started_at_seconds", 0)),
+            ended_at_seconds=float(data.get("ended_at_seconds", 0)),
+            recorded_at=parse_dt(data.get("recorded_at")) or utc_now(),
+            slide=data.get("slide"),
+        )
+
+
+@dataclass
 class Session:
     id: str
     title: str
@@ -69,6 +123,7 @@ class Session:
     current_slide: int | None = None
     transcription_state: str = "pendiente"
     events: list[SessionEvent] = field(default_factory=list)
+    transcript_segments: list[TranscriptSegment] = field(default_factory=list)
 
     @classmethod
     def create(cls, title: str | None = None, now: datetime | None = None) -> "Session":
@@ -148,6 +203,26 @@ class Session:
         self.current_slide = slide
         self.add_event("diapositiva_actualizada", now or utc_now(), str(slide))
 
+    def add_transcript_segment(
+        self,
+        text: str,
+        started_at_seconds: float,
+        ended_at_seconds: float,
+        now: datetime | None = None,
+    ) -> TranscriptSegment:
+        segment = TranscriptSegment.create(
+            text=text,
+            started_at_seconds=started_at_seconds,
+            ended_at_seconds=ended_at_seconds,
+            slide=self.current_slide,
+            recorded_at=now or utc_now(),
+        )
+        self.transcript_segments.append(segment)
+        self.transcription_state = "capturando"
+        detail = f"diapositiva {segment.slide}" if segment.slide else "sin presentacion"
+        self.add_event("transcripcion_guardada", segment.recorded_at, detail)
+        return segment
+
     def to_dict(self, now: datetime | None = None) -> dict[str, Any]:
         return {
             "id": self.id,
@@ -163,6 +238,7 @@ class Session:
             "current_slide": self.current_slide,
             "transcription_state": self.transcription_state,
             "events": [event.to_dict() for event in self.events],
+            "transcript_segments": [segment.to_dict() for segment in self.transcript_segments],
         }
 
     @classmethod
@@ -180,6 +256,9 @@ class Session:
             current_slide=data.get("current_slide"),
             transcription_state=str(data.get("transcription_state", "pendiente")),
             events=[SessionEvent.from_dict(item) for item in data.get("events", [])],
+            transcript_segments=[
+                TranscriptSegment.from_dict(item) for item in data.get("transcript_segments", [])
+            ],
         )
 
     def _close_running_interval(self, timestamp: datetime) -> None:
@@ -235,4 +314,3 @@ class SessionStore:
         with self.path.open("w", encoding="utf-8") as file:
             json.dump(payload, file, ensure_ascii=False, indent=2)
             file.write("\n")
-

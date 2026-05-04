@@ -114,6 +114,7 @@ h2 {
 .session-panel,
 .control-surface,
 .context-panel,
+.transcription-panel,
 .event-log-panel {
   border: 1px solid #d8ded9;
   border-radius: 8px;
@@ -159,11 +160,13 @@ h2 {
 }
 
 .context-panel,
+.transcription-panel,
 .event-log-panel {
   padding: 18px;
 }
 
 .context-panel h2,
+.transcription-panel h2,
 .event-log-panel h2 {
   margin-bottom: 16px;
 }
@@ -209,8 +212,68 @@ h2 {
   font-weight: 800;
 }
 
+.transcription-panel,
 .event-log-panel {
   margin-top: 16px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.support-text {
+  margin: 6px 0 0;
+  color: #5d6762;
+}
+
+.voice-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.subtitle-box {
+  min-height: 96px;
+  border: 1px solid #d8ded9;
+  border-radius: 8px;
+  padding: 18px;
+  background: #111f1c;
+  color: #ffffff;
+  font-size: 1.35rem;
+  line-height: 1.35;
+}
+
+.transcript-history {
+  margin-top: 18px;
+}
+
+.transcript-history h3 {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+}
+
+#transcript-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+#transcript-list li {
+  border-bottom: 1px solid #eef1ee;
+  padding: 10px 0;
+}
+
+#transcript-list span {
+  display: block;
+  color: #5d6762;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 .event-log {
@@ -234,7 +297,8 @@ h2 {
   .control-surface,
   .context-grid,
   .input-row,
-  .slide-marker {
+  .slide-marker,
+  .panel-header {
     grid-template-columns: 1fr;
   }
 
@@ -242,8 +306,19 @@ h2 {
     display: grid;
   }
 
+  .panel-header {
+    display: grid;
+  }
+
+  .voice-controls {
+    justify-content: stretch;
+  }
+
+  .voice-controls button {
+    flex: 1;
+  }
+
   .controls {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-

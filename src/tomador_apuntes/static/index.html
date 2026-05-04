@@ -75,6 +75,24 @@
           </article>
         </section>
 
+        <section class="transcription-panel" aria-label="Transcripción en vivo">
+          <div class="panel-header">
+            <div>
+              <h2>Transcripción en vivo</h2>
+              <p id="speech-support" class="support-text">Preparando reconocimiento de voz...</p>
+            </div>
+            <div class="voice-controls">
+              <button id="voice-start-button" type="button" disabled>Activar voz</button>
+              <button id="voice-stop-button" type="button" disabled>Detener voz</button>
+            </div>
+          </div>
+          <div class="subtitle-box" id="live-subtitle">Los subtítulos aparecerán aquí cuando hables.</div>
+          <div class="transcript-history">
+            <h3>Segmentos guardados</h3>
+            <ol id="transcript-list"></ol>
+          </div>
+        </section>
+
         <section class="event-log-panel">
           <h2>Bitácora de sesión</h2>
           <ol id="event-log" class="event-log"></ol>
@@ -84,4 +102,3 @@
     <script src="/static/app.js"></script>
   </body>
 </html>
-

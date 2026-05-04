@@ -27,9 +27,9 @@ La planificación del proyecto está en `.planning/`:
 
 ## Fase Actual
 
-Fase 1: Base de Sesión.
+Fase 3: Transcripción en Vivo.
 
-El objetivo de esta fase es construir la base usable para crear una sesión, controlar su estado y permitir el modo sin presentación antes de integrar transcripción, presentaciones e IA documental.
+La base de sesión ya existe. El foco actual es probar voz real desde el navegador, mostrar subtítulos en vivo y guardar segmentos de transcripción asociados a la diapositiva activa.
 
 ## Ejecutar en Local
 
@@ -61,6 +61,29 @@ Luego abre:
 http://127.0.0.1:8000
 ```
 
+## Probar Voz en Vivo
+
+Usa Chrome o Edge, porque esta versión usa la Web Speech API del navegador.
+
+Flujo recomendado:
+
+1. Crea una sesión.
+2. Presiona `Iniciar`.
+3. Opcionalmente registra una presentación, por ejemplo `clase.pdf`.
+4. Presiona `Activar voz`.
+5. Acepta el permiso de micrófono del navegador.
+6. Habla en español.
+7. Cambia de diapositiva con los botones o con las flechas izquierda/derecha.
+8. Revisa los segmentos guardados en la sección `Transcripción en vivo`.
+
+Los segmentos se guardan automáticamente en:
+
+```text
+data/sessions.json
+```
+
+Cada segmento conserva texto, tiempo relativo de inicio/fin y diapositiva activa si corresponde.
+
 ## Pruebas
 
 ```powershell
@@ -81,4 +104,4 @@ La primera base está implementada en Python usando solo librerías estándar:
 - JSON local en `data/sessions.json` para persistir sesiones.
 - HTML/CSS/JavaScript estático para la interfaz.
 
-La captura real de micrófono y la transcripción en vivo quedan para la fase de transcripción. La generación de acta formal queda fuera del producto: el usuario la hará por su cuenta a partir de la transcripción y los apuntes generados.
+La captura de micrófono y transcripción en vivo inicial ya está integrada con Web Speech API. La generación de acta formal queda fuera del producto: el usuario la hará por su cuenta a partir de la transcripción y los apuntes generados.

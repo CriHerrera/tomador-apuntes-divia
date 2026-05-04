@@ -36,17 +36,22 @@ class AppHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
-        if parsed.path == "/api/sessions":
+        try:
             payload = self._read_json()
+        except json.JSONDecodeError:
+            self._send_json({"error": "JSON invalido"}, HTTPStatus.BAD_REQUEST)
+            return
+
+        if parsed.path == "/api/sessions":
             session = self.store.create_session(payload.get("title"))
             self._send_json({"session": session.to_dict()}, HTTPStatus.CREATED)
             return
         if parsed.path.startswith("/api/sessions/"):
-            self._handle_session_action(parsed.path)
+            self._handle_session_action(parsed.path, payload)
             return
         self.send_error(HTTPStatus.NOT_FOUND, "Ruta no encontrada")
 
-    def _handle_session_action(self, path: str) -> None:
+    def _handle_session_action(self, path: str, payload: dict) -> None:
         parts = path.strip("/").split("/")
         if len(parts) != 4 or parts[0] != "api" or parts[1] != "sessions":
             self.send_error(HTTPStatus.NOT_FOUND, "Ruta no encontrada")
@@ -54,7 +59,6 @@ class AppHandler(SimpleHTTPRequestHandler):
 
         session_id = parts[2]
         action = parts[3]
-        payload = self._read_json()
 
         try:
             session = self.store.get(session_id)
@@ -70,6 +74,12 @@ class AppHandler(SimpleHTTPRequestHandler):
                 session.set_presentation(payload.get("presentation_name"))
             elif action == "slide":
                 session.set_current_slide(int(payload.get("slide", 1)))
+            elif action == "transcript":
+                session.add_transcript_segment(
+                    text=str(payload.get("text", "")),
+                    started_at_seconds=float(payload.get("started_at_seconds", 0)),
+                    ended_at_seconds=float(payload.get("ended_at_seconds", 0)),
+                )
             else:
                 self.send_error(HTTPStatus.NOT_FOUND, "Accion no encontrada")
                 return
@@ -140,4 +150,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

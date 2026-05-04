@@ -20,8 +20,18 @@ const elements = {
   currentSlide: document.querySelector("#current-slide"),
   captureState: document.querySelector("#capture-state"),
   sessionMode: document.querySelector("#session-mode"),
+  speechSupport: document.querySelector("#speech-support"),
+  voiceStartButton: document.querySelector("#voice-start-button"),
+  voiceStopButton: document.querySelector("#voice-stop-button"),
+  liveSubtitle: document.querySelector("#live-subtitle"),
+  transcriptList: document.querySelector("#transcript-list"),
   eventLog: document.querySelector("#event-log"),
 };
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let voiceActive = false;
+let segmentStartSeconds = 0;
 
 function formatSeconds(totalSeconds) {
   const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, "0");
@@ -49,6 +59,7 @@ function eventLabel(event) {
     sesion_detenida: "Sesión detenida",
     presentacion_actualizada: "Presentación actualizada",
     diapositiva_actualizada: "Diapositiva actualizada",
+    transcripcion_guardada: "Transcripción guardada",
   };
   return labels[event.type] || event.type;
 }
@@ -85,6 +96,9 @@ async function runAction(action, body = {}) {
 
 function setSession(session) {
   state.session = session;
+  if (!voiceActive) {
+    segmentStartSeconds = session.elapsed_seconds || 0;
+  }
   render();
 }
 
@@ -109,7 +123,10 @@ function render() {
   elements.presentationButton.disabled = session.status === "detenida";
   elements.previousSlide.disabled = !session.presentation_name || session.status === "detenida";
   elements.nextSlide.disabled = !session.presentation_name || session.status === "detenida";
+  elements.voiceStartButton.disabled = !SpeechRecognition || voiceActive || session.status !== "en_vivo";
+  elements.voiceStopButton.disabled = !SpeechRecognition || !voiceActive;
 
+  renderTranscript(session.transcript_segments || []);
   elements.eventLog.innerHTML = "";
   for (const item of [...session.events].reverse()) {
     const li = document.createElement("li");
@@ -123,6 +140,19 @@ function render() {
   }
 }
 
+function renderTranscript(segments) {
+  elements.transcriptList.innerHTML = "";
+  for (const segment of [...segments].reverse()) {
+    const li = document.createElement("li");
+    const meta = document.createElement("span");
+    const slideText = segment.slide ? `Diapositiva ${segment.slide}` : "Sin presentación";
+    meta.textContent = `${formatSeconds(segment.started_at_seconds)} - ${formatSeconds(segment.ended_at_seconds)} · ${slideText}`;
+    li.appendChild(meta);
+    li.append(document.createTextNode(segment.text));
+    elements.transcriptList.appendChild(li);
+  }
+}
+
 async function refreshSession() {
   const payload = await request("/api/sessions");
   if (payload.sessions.length > 0) {
@@ -130,11 +160,86 @@ async function refreshSession() {
   }
 }
 
+function setupSpeechRecognition() {
+  if (!SpeechRecognition) {
+    elements.speechSupport.textContent = "Este navegador no soporta reconocimiento de voz local. Prueba con Chrome o Edge.";
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "es-CL";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 1;
+  elements.speechSupport.textContent = "Reconocimiento disponible. Inicia una sesión y activa voz.";
+
+  recognition.addEventListener("result", handleSpeechResult);
+  recognition.addEventListener("end", () => {
+    if (voiceActive) {
+      recognition.start();
+    }
+  });
+  recognition.addEventListener("error", (event) => {
+    elements.speechSupport.textContent = `Error de voz: ${event.error}`;
+    voiceActive = false;
+    render();
+  });
+}
+
+function handleSpeechResult(event) {
+  let interimText = "";
+  for (let index = event.resultIndex; index < event.results.length; index += 1) {
+    const result = event.results[index];
+    const text = result[0].transcript.trim();
+    if (!text) continue;
+    if (result.isFinal) {
+      saveTranscriptSegment(text);
+    } else {
+      interimText += `${text} `;
+    }
+  }
+  elements.liveSubtitle.textContent = interimText.trim() || "Escuchando...";
+}
+
+async function saveTranscriptSegment(text) {
+  if (!state.session) return;
+  const endedAt = state.session.elapsed_seconds || 0;
+  const startedAt = Math.min(segmentStartSeconds, endedAt);
+  elements.liveSubtitle.textContent = text;
+  await runAction("transcript", {
+    text,
+    started_at_seconds: startedAt,
+    ended_at_seconds: endedAt,
+  });
+  segmentStartSeconds = state.session?.elapsed_seconds || endedAt;
+}
+
+function startVoice() {
+  if (!recognition || !state.session || state.session.status !== "en_vivo") return;
+  voiceActive = true;
+  segmentStartSeconds = state.session.elapsed_seconds || 0;
+  elements.liveSubtitle.textContent = "Escuchando...";
+  elements.speechSupport.textContent = "Voz activa. Habla cerca del micrófono.";
+  recognition.start();
+  render();
+}
+
+function stopVoice() {
+  if (!recognition) return;
+  voiceActive = false;
+  recognition.stop();
+  elements.liveSubtitle.textContent = "Voz detenida.";
+  elements.speechSupport.textContent = "Reconocimiento disponible. Puedes reactivar voz cuando la sesión esté en vivo.";
+  render();
+}
+
 elements.createForm.addEventListener("submit", createSession);
 elements.startButton.addEventListener("click", () => runAction("start"));
 elements.pauseButton.addEventListener("click", () => runAction("pause"));
 elements.resumeButton.addEventListener("click", () => runAction("resume"));
 elements.stopButton.addEventListener("click", () => runAction("stop"));
+elements.voiceStartButton.addEventListener("click", startVoice);
+elements.voiceStopButton.addEventListener("click", stopVoice);
 elements.presentationForm.addEventListener("submit", (event) => {
   event.preventDefault();
   runAction("presentation", { presentation_name: elements.presentationName.value });
@@ -159,5 +264,5 @@ window.addEventListener("keydown", (event) => {
 });
 
 setInterval(refreshSession, 1000);
+setupSpeechRecognition();
 refreshSession();
-
