@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tomador Apuntes Divia</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Sesión en vivo</p>
+            <h1>Tomador Apuntes Divia</h1>
+          </div>
+          <div class="status-pill" id="session-status">Sin sesión</div>
+        </header>
+
+        <section class="session-panel" aria-label="Crear sesión">
+          <form id="create-session-form" class="session-form">
+            <label for="session-title">Nombre de la sesión</label>
+            <div class="input-row">
+              <input id="session-title" name="title" type="text" value="Reunión sin presentación">
+              <button type="submit">Crear sesión</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="control-surface" aria-label="Controles de sesión">
+          <div class="timer-block">
+            <span class="label">Tiempo transcurrido</span>
+            <strong id="elapsed-time">00:00:00</strong>
+          </div>
+          <div class="controls">
+            <button id="start-button" type="button" disabled>Iniciar</button>
+            <button id="pause-button" type="button" disabled>Pausar</button>
+            <button id="resume-button" type="button" disabled>Reanudar</button>
+            <button id="stop-button" type="button" disabled>Detener</button>
+          </div>
+        </section>
+
+        <section class="context-grid">
+          <article class="context-panel">
+            <h2>Presentación</h2>
+            <form id="presentation-form">
+              <label for="presentation-name">Archivo o nombre de presentación</label>
+              <div class="input-row">
+                <input id="presentation-name" type="text" placeholder="Ej: clase-intro.pdf">
+                <button type="submit" disabled id="presentation-button">Registrar</button>
+              </div>
+            </form>
+            <div class="slide-marker">
+              <button id="previous-slide" type="button" disabled>Anterior</button>
+              <div>
+                <span class="label">Diapositiva actual</span>
+                <strong id="current-slide">Sin presentación</strong>
+              </div>
+              <button id="next-slide" type="button" disabled>Siguiente</button>
+            </div>
+          </article>
+
+          <article class="context-panel">
+            <h2>Estado de transcripción</h2>
+            <dl class="state-list">
+              <div>
+                <dt>Captura</dt>
+                <dd id="capture-state">Pendiente</dd>
+              </div>
+              <div>
+                <dt>Modo</dt>
+                <dd id="session-mode">Sin presentación</dd>
+              </div>
+            </dl>
+          </article>
+        </section>
+
+        <section class="event-log-panel">
+          <h2>Bitácora de sesión</h2>
+          <ol id="event-log" class="event-log"></ol>
+        </section>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+

@@ -31,3 +31,55 @@ La planificación del proyecto está en `.planning/`:
 Fase 1: Base de Sesión.
 
 El objetivo de esta fase es construir la base usable para crear una sesión, controlar su estado y permitir el modo sin presentación antes de integrar transcripción, presentaciones e IA documental.
+
+## Ejecutar en Local
+
+Requisitos:
+
+- Python 3.11 o superior.
+
+Comando:
+
+```powershell
+python -m tomador_apuntes.app --port 8000
+```
+
+Si ejecutas desde el repositorio sin instalar el paquete:
+
+```powershell
+$env:PYTHONPATH="src"; python -m tomador_apuntes.app --port 8000
+```
+
+En esta máquina también puedes usar la instalación detectada de Python directamente:
+
+```powershell
+$env:PYTHONPATH="src"; & "C:\Users\cristian.herrera\AppData\Local\Programs\Python\Python314\python.exe" -m tomador_apuntes.app --port 8000
+```
+
+Luego abre:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Pruebas
+
+```powershell
+$env:PYTHONPATH="src"; python -m unittest discover -s tests
+```
+
+Con la ruta local detectada:
+
+```powershell
+$env:PYTHONPATH="src"; & "C:\Users\cristian.herrera\AppData\Local\Programs\Python\Python314\python.exe" -m unittest discover -s tests
+```
+
+## Estado Técnico
+
+La primera base está implementada en Python usando solo librerías estándar:
+
+- `http.server` para servir la app local.
+- JSON local en `data/sessions.json` para persistir sesiones.
+- HTML/CSS/JavaScript estático para la interfaz.
+
+La captura real de micrófono y la transcripción en vivo quedan para la fase de transcripción.

@@ -1,0 +1,17 @@
+[project]
+name = "tomador-apuntes-divia"
+version = "0.1.0"
+description = "Asistente en vivo para tomar actas, transcribir audio y contextualizar reuniones con presentaciones."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "Divia" }
+]
+
+[project.scripts]
+tomador-apuntes = "tomador_apuntes.app:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
