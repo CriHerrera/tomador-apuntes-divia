@@ -1,97 +1,97 @@
 # Roadmap: Tomador Apuntes Divia
 
-**Created:** 2026-05-04
-**Scope:** v1 live meeting/presentation assistant
+**Creado:** 2026-05-04
+**Alcance:** v1 de asistente en vivo para reuniones y presentaciones
 
-## Summary
+## Resumen
 
-5 phases | 27 v1 requirements mapped | All v1 requirements covered
+5 fases | 27 requisitos v1 mapeados | Todos los requisitos v1 cubiertos
 
-| # | Phase | Goal | Requirements |
-|---|-------|------|--------------|
-| 1 | Session Shell | User can run a basic live session with clear session controls | SESS-01, SESS-02, SESS-03, SESS-04 |
-| 2 | Presentation Context | User can upload PDF/PPTX and manually mark the active slide | PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06 |
-| 3 | Live Transcription | System captures audio, transcribes it live, and stores timestamped segments | TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05 |
-| 4 | Document Intelligence | System generates contextual notes and formal acta from transcript and slide context | NOTE-01, NOTE-02, NOTE-03, NOTE-04, ACTA-01, ACTA-02, ACTA-03, ACTA-04 |
-| 5 | Review and Export | User can review and export the three separate documents | EXPT-01, EXPT-02, EXPT-03, EXPT-04 |
+| # | Fase | Objetivo | Requisitos |
+|---|------|----------|------------|
+| 1 | Base de Sesión | El usuario puede ejecutar una sesión en vivo básica con controles claros | SESS-01, SESS-02, SESS-03, SESS-04 |
+| 2 | Contexto de Presentación | El usuario puede cargar PDF/PPTX y marcar manualmente la diapositiva activa | PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06 |
+| 3 | Transcripción en Vivo | El sistema captura audio, lo transcribe en vivo y guarda segmentos con marcas de tiempo | TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05 |
+| 4 | Inteligencia Documental | El sistema genera apuntes contextualizados y acta formal desde transcripción y contexto de diapositivas | NOTE-01, NOTE-02, NOTE-03, NOTE-04, ACTA-01, ACTA-02, ACTA-03, ACTA-04 |
+| 5 | Revisión y Exportación | El usuario puede revisar y exportar los tres documentos separados | EXPT-01, EXPT-02, EXPT-03, EXPT-04 |
 
-## Phase Details
+## Detalle de Fases
 
-### Phase 1: Session Shell
+### Fase 1: Base de Sesión
 
-**Goal:** Build the usable shell for live sessions before integrating AI-heavy behavior.
+**Objetivo:** Construir la base usable para sesiones en vivo antes de integrar comportamiento pesado de IA.
 
-**Requirements:** SESS-01, SESS-02, SESS-03, SESS-04
+**Requisitos:** SESS-01, SESS-02, SESS-03, SESS-04
 
-**Success Criteria:**
-1. User can create a session and see the session workspace.
-2. User can start, pause, resume, and stop a session.
-3. User can run the session without uploading a presentation.
-4. UI clearly shows recording/transcription state and elapsed time.
-
-**UI hint:** yes
-
-### Phase 2: Presentation Context
-
-**Goal:** Add deck upload and the low-friction manual slide signaling flow.
-
-**Requirements:** PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06
-
-**Success Criteria:**
-1. User can upload PDF and PPTX files.
-2. User can inspect slides through thumbnails or a slide list.
-3. User can quickly mark the active slide with controls and keyboard shortcuts.
-4. Every slide change is recorded with a timestamp.
+**Criterios de éxito:**
+1. El usuario puede crear una sesión y ver el espacio de trabajo.
+2. El usuario puede iniciar, pausar, reanudar y detener una sesión.
+3. El usuario puede ejecutar la sesión sin cargar una presentación.
+4. La interfaz muestra claramente estado de grabación/transcripción y tiempo transcurrido.
 
 **UI hint:** yes
 
-### Phase 3: Live Transcription
+### Fase 2: Contexto de Presentación
 
-**Goal:** Capture microphone audio and convert it into live timestamped transcript/subtitles.
+**Objetivo:** Agregar carga de presentación y el flujo manual de señalización de diapositiva con baja fricción.
 
-**Requirements:** TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05
+**Requisitos:** PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06
 
-**Success Criteria:**
-1. User grants microphone permission and audio capture starts reliably.
-2. Transcript/subtitle text appears during the session.
-3. Transcript segments persist with timestamps.
-4. Transcript segments are linked to the active slide when present.
-5. Transcript segments are grouped by time range when no presentation exists.
-
-**UI hint:** yes
-
-### Phase 4: Document Intelligence
-
-**Goal:** Generate the two structured outputs that require interpretation: notes/resumen and formal acta.
-
-**Requirements:** NOTE-01, NOTE-02, NOTE-03, NOTE-04, ACTA-01, ACTA-02, ACTA-03, ACTA-04
-
-**Success Criteria:**
-1. Notes are grouped by slide when a presentation exists.
-2. Notes are grouped by meeting segment when no presentation exists.
-3. Notes include key points, explanations, questions, and follow-ups.
-4. Acta includes summary, topics, agreements, decisions, action items, and open questions.
-5. Acta references slide numbers or titles when relevant.
+**Criterios de éxito:**
+1. El usuario puede cargar archivos PDF y PPTX.
+2. El usuario puede revisar diapositivas mediante miniaturas o lista.
+3. El usuario puede marcar rápidamente la diapositiva activa con controles y atajos de teclado.
+4. Cada cambio de diapositiva queda registrado con marca de tiempo.
 
 **UI hint:** yes
 
-### Phase 5: Review and Export
+### Fase 3: Transcripción en Vivo
 
-**Goal:** Let the user review and export the three required documents separately.
+**Objetivo:** Capturar audio del micrófono y convertirlo en transcripción/subtítulos en vivo con marcas de tiempo.
 
-**Requirements:** EXPT-01, EXPT-02, EXPT-03, EXPT-04
+**Requisitos:** TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05
 
-**Success Criteria:**
-1. User can review transcription/subtitles before export.
-2. User can review formal acta before export.
-3. User can review notes/resumen before export.
-4. User can export all three documents independently.
+**Criterios de éxito:**
+1. El usuario concede permiso de micrófono y la captura de audio inicia de forma confiable.
+2. La transcripción/subtítulos aparecen durante la sesión.
+3. Los segmentos de transcripción persisten con marcas de tiempo.
+4. Los segmentos se vinculan a la diapositiva activa cuando existe presentación.
+5. Los segmentos se agrupan por rango de tiempo cuando no existe presentación.
 
 **UI hint:** yes
 
-## Coverage Validation
+### Fase 4: Inteligencia Documental
 
-All 27 v1 requirements are mapped to exactly one phase.
+**Objetivo:** Generar las dos salidas estructuradas que requieren interpretación: apuntes/resumen y acta formal.
+
+**Requisitos:** NOTE-01, NOTE-02, NOTE-03, NOTE-04, ACTA-01, ACTA-02, ACTA-03, ACTA-04
+
+**Criterios de éxito:**
+1. Los apuntes se agrupan por diapositiva cuando existe presentación.
+2. Los apuntes se agrupan por segmento de reunión cuando no existe presentación.
+3. Los apuntes incluyen puntos clave, explicaciones, preguntas y seguimientos.
+4. El acta incluye resumen, temas, acuerdos, decisiones, tareas y preguntas abiertas.
+5. El acta referencia números o títulos de diapositivas cuando corresponde.
+
+**UI hint:** yes
+
+### Fase 5: Revisión y Exportación
+
+**Objetivo:** Permitir que el usuario revise y exporte los tres documentos requeridos por separado.
+
+**Requisitos:** EXPT-01, EXPT-02, EXPT-03, EXPT-04
+
+**Criterios de éxito:**
+1. El usuario puede revisar transcripción/subtítulos antes de exportar.
+2. El usuario puede revisar el acta formal antes de exportar.
+3. El usuario puede revisar apuntes/resumen antes de exportar.
+4. El usuario puede exportar los tres documentos de forma independiente.
+
+**UI hint:** yes
+
+## Validación de Cobertura
+
+Los 27 requisitos v1 están mapeados exactamente a una fase.
 
 ---
-*Last updated: 2026-05-04 after roadmap creation*
+*Última actualización: 2026-05-04 después de crear el roadmap*

@@ -1,26 +1,26 @@
 # AGENTS.md
 
-## Project
+## Proyecto
 
-Tomador Apuntes Divia is a live meeting and presentation assistant. It captures audio, optionally uses PDF/PPTX slides as context, and generates three separate outputs: transcription/subtitles, formal acta, and notes/resumen.
+Tomador Apuntes Divia es un asistente en vivo para reuniones y presentaciones. Captura audio, usa opcionalmente diapositivas PDF/PPTX como contexto y genera tres salidas separadas: transcripción/subtítulos, acta formal y apuntes/resumen.
 
-## GSD Context
+## Contexto GSD
 
-Planning artifacts live in `.planning/`:
+Los artefactos de planificación viven en `.planning/`:
 
-- `.planning/PROJECT.md` - product context and core value
-- `.planning/REQUIREMENTS.md` - v1 requirements and traceability
-- `.planning/ROADMAP.md` - phase structure
-- `.planning/STATE.md` - current phase state
+- `.planning/PROJECT.md` - contexto del producto y valor principal
+- `.planning/REQUIREMENTS.md` - requisitos v1 y trazabilidad
+- `.planning/ROADMAP.md` - estructura de fases
+- `.planning/STATE.md` - estado de la fase actual
 
-Before implementation, read the relevant planning files and keep changes aligned with the active phase.
+Antes de implementar, lee los archivos de planificación relevantes y mantén los cambios alineados con la fase activa.
 
-## Current Focus
+## Foco Actual
 
-Phase 1: Session Shell.
+Fase 1: Base de Sesión.
 
-Goal: user can create and control a live session, including sessions without a presentation.
+Objetivo: el usuario puede crear y controlar una sesión en vivo, incluyendo sesiones sin presentación.
 
-## Local Instructions
+## Instrucciones Locales
 
-The parent Codex environment includes `C:\Users\cristian.herrera\.codex\RTK.md`, which requires shell commands to be prefixed with `rtk`.
+El entorno Codex padre incluye `C:\Users\cristian.herrera\.codex\RTK.md`, que exige prefijar los comandos de shell con `rtk`.

@@ -1,90 +1,90 @@
 # Tomador Apuntes Divia
 
-## What This Is
+## Qué Es
 
-Tomador Apuntes Divia is a live meeting and presentation assistant. It listens to the presenter or meeting audio, produces subtitles/transcription, and uses an uploaded PDF/PPTX presentation as context when available.
+Tomador Apuntes Divia es un asistente en vivo para reuniones y presentaciones. Escucha el audio del presentador o de la reunión, genera subtítulos/transcripción y usa una presentación PDF/PPTX como contexto cuando existe.
 
-The tool must also work without a presentation, so it can produce useful meeting records from normal audio-only meetings. When a presentation exists, the user manually signals the current slide in the most efficient way possible so the system can connect what is said with the right slide context.
+La herramienta también debe funcionar sin presentación, para que pueda producir actas útiles de reuniones normales solo con audio. Cuando hay presentación, el usuario señaliza manualmente la diapositiva activa de la forma más rápida posible para conectar lo que se dice con el contexto correcto.
 
-## Core Value
+## Valor Principal
 
-Turn live spoken audio into useful, structured meeting outputs without requiring the user to write notes during the session.
+Convertir audio hablado en vivo en documentos útiles y estructurados sin que el usuario tenga que tomar apuntes durante la sesión.
 
-## Requirements
+## Requisitos
 
-### Validated
+### Validados
 
-(None yet - ship to validate)
+(Ninguno todavía - hay que construir y validar)
 
-### Active
+### Activos
 
-- [ ] User can run a live session that captures microphone audio.
-- [ ] User can load a PDF or PPTX presentation before or during a session.
-- [ ] User can quickly signal which slide the presenter is currently discussing.
-- [ ] System can continue without a presentation and still produce a meeting acta.
-- [ ] System can generate three separate documents: transcription/subtitles, formal acta, and notes/resumen.
-- [ ] When slides are present, notes and summaries are contextualized by slide.
-- [ ] User can export the generated documents after the session.
+- [ ] El usuario puede iniciar una sesión en vivo que captura audio del micrófono.
+- [ ] El usuario puede cargar una presentación PDF o PPTX antes o durante una sesión.
+- [ ] El usuario puede señalizar rápidamente qué diapositiva está tratando el presentador.
+- [ ] El sistema puede funcionar sin presentación y aun así generar un acta de reunión.
+- [ ] El sistema puede generar tres documentos separados: transcripción/subtítulos, acta formal y apuntes/resumen.
+- [ ] Cuando hay diapositivas, los apuntes y resúmenes se contextualizan por diapositiva.
+- [ ] El usuario puede exportar los documentos generados al terminar la sesión.
 
-### Out of Scope
+### Fuera de Alcance
 
-- Automatic slide-change detection in v1 - useful later, but manual signaling is the fastest reliable MVP path.
-- Full video analysis in v1 - audio plus presentation context is enough to validate core value.
-- Real-time multi-speaker diarization as a hard v1 requirement - speaker labels can be improved after the basic acta flow works.
-- Native mobile apps in v1 - web or desktop-first keeps the build focused.
+- Detección automática de cambio de diapositiva en v1 - es útil después, pero la señalización manual es el camino más confiable para el MVP.
+- Análisis completo de video en v1 - audio más contexto de presentación es suficiente para validar el valor principal.
+- Diarización multi-hablante en tiempo real como requisito duro de v1 - las etiquetas de hablante pueden mejorar después de que funcione el flujo básico de acta.
+- Aplicaciones móviles nativas en v1 - web o escritorio primero mantiene el alcance enfocado.
 
-## Context
+## Contexto
 
-The product is intended for live presentations, classes, meetings, or talks where the user wants accurate records but cannot manually take notes while listening. The presentation is not the only input; the system must remain useful for meetings with no deck.
+El producto está pensado para presentaciones, clases, reuniones o charlas en vivo donde el usuario necesita registros precisos, pero no puede tomar apuntes manualmente mientras escucha. La presentación no es la única entrada; el sistema debe seguir siendo útil para reuniones sin diapositivas.
 
-The critical workflow is:
+El flujo crítico es:
 
-1. User starts a session.
-2. User optionally uploads a PDF or PPTX.
-3. Tool captures live audio and shows subtitles/transcription.
-4. User marks the active slide as the presenter moves through the deck.
-5. Tool uses audio plus current slide context to create structured outputs.
-6. User exports three separate documents:
-   - Transcription/subtitles.
-   - Formal acta.
-   - Notes/resumen by slide or by meeting segment.
+1. El usuario inicia una sesión.
+2. El usuario opcionalmente carga un PDF o PPTX.
+3. La herramienta captura audio en vivo y muestra subtítulos/transcripción.
+4. El usuario marca la diapositiva activa a medida que el presentador avanza.
+5. La herramienta usa el audio más la diapositiva actual para crear salidas estructuradas.
+6. El usuario exporta tres documentos separados:
+   - Transcripción/subtítulos.
+   - Acta formal.
+   - Apuntes/resumen por diapositiva o por segmento de reunión.
 
-The slide-marker interaction needs to be very low friction. Candidate controls include keyboard shortcuts, previous/next buttons, direct slide number entry, and a visible current-slide indicator.
+La interacción para marcar diapositivas debe tener muy baja fricción. Controles candidatos: atajos de teclado, botones anterior/siguiente, ingreso directo de número de diapositiva e indicador visible de diapositiva actual.
 
-## Constraints
+## Restricciones
 
-- **Presentation input**: v1 must support PDF and PPTX - these are the formats explicitly requested.
-- **Live-first**: v1 should prioritize live audio capture and live context marking - post-event processing can reuse the same pipeline later.
-- **No-presentation mode**: v1 cannot assume a deck exists - normal meeting acta generation is required.
-- **Document separation**: outputs must be generated as three distinct artifacts - transcription/subtitles, formal acta, and notes/resumen.
-- **Reliability**: manual slide signaling is preferred for v1 because automatic slide detection would add fragile computer-vision complexity.
+- **Entrada de presentación**: v1 debe soportar PDF y PPTX porque ambos fueron pedidos explícitamente.
+- **Primero en vivo**: v1 debe priorizar captura de audio en vivo y señalización contextual en vivo; el procesamiento post-evento puede reutilizar la misma arquitectura después.
+- **Modo sin presentación**: v1 no puede asumir que existe una presentación; la generación de acta para reuniones normales es obligatoria.
+- **Documentos separados**: las salidas deben generarse como tres artefactos distintos: transcripción/subtítulos, acta formal y apuntes/resumen.
+- **Confiabilidad**: se prefiere señalización manual de diapositiva en v1 porque la detección automática agregaría complejidad frágil de visión/computación.
 
-## Key Decisions
+## Decisiones Clave
 
-| Decision | Rationale | Outcome |
-|----------|-----------|---------|
-| Build live-first, with post-event as future-compatible architecture | User wants live audio and slide context during the event; post-event is useful but secondary | - Pending |
-| Support PDF and PPTX deck upload | User explicitly requested both formats | - Pending |
-| User manually signals the current slide in v1 | Most reliable way to align speech with slide context quickly | - Pending |
-| Support sessions without presentation | User explicitly said acta must work for normal meetings | - Pending |
-| Generate three separate documents | User wants transcription/subtitles, acta, and notes/resumen separately | - Pending |
+| Decisión | Razonamiento | Resultado |
+|----------|--------------|-----------|
+| Construir primero el flujo en vivo, con arquitectura compatible con post-evento | El usuario quiere audio y contexto de diapositivas durante la sesión; post-evento es útil pero secundario | - Pendiente |
+| Soportar carga de PDF y PPTX | El usuario pidió explícitamente ambos formatos | - Pendiente |
+| El usuario señaliza manualmente la diapositiva actual en v1 | Es la forma más confiable de alinear habla y contexto de diapositiva rápidamente | - Pendiente |
+| Soportar sesiones sin presentación | El usuario indicó explícitamente que el acta debe funcionar para reuniones normales | - Pendiente |
+| Generar tres documentos separados | El usuario quiere transcripción/subtítulos, acta y apuntes/resumen por separado | - Pendiente |
 
-## Evolution
+## Evolución
 
-This document evolves at phase transitions and milestone boundaries.
+Este documento evoluciona en transiciones de fase y cierres de hito.
 
-**After each phase transition** (via `$gsd-transition`):
-1. Requirements invalidated? -> Move to Out of Scope with reason
-2. Requirements validated? -> Move to Validated with phase reference
-3. New requirements emerged? -> Add to Active
-4. Decisions to log? -> Add to Key Decisions
-5. "What This Is" still accurate? -> Update if drifted
+**Después de cada transición de fase**:
+1. ¿Requisitos invalidados? -> mover a Fuera de Alcance con razón.
+2. ¿Requisitos validados? -> mover a Validados con referencia de fase.
+3. ¿Surgieron requisitos nuevos? -> agregar a Activos.
+4. ¿Hay decisiones que registrar? -> agregar a Decisiones Clave.
+5. ¿"Qué Es" sigue siendo correcto? -> actualizar si cambió la realidad del producto.
 
-**After each milestone** (via `$gsd-complete-milestone`):
-1. Full review of all sections
-2. Core Value check - still the right priority?
-3. Audit Out of Scope - reasons still valid?
-4. Update Context with current state
+**Después de cada hito**:
+1. Revisión completa de todas las secciones.
+2. Chequeo del valor principal.
+3. Auditoría de Fuera de Alcance.
+4. Actualización del contexto con el estado actual.
 
 ---
-*Last updated: 2026-05-04 after initialization*
+*Última actualización: 2026-05-04 después de la inicialización*

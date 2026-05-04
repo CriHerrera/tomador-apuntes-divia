@@ -1,28 +1,28 @@
-# State: Tomador Apuntes Divia
+# Estado: Tomador Apuntes Divia
 
-**Initialized:** 2026-05-04
-**Current phase:** Phase 1 - Session Shell
-**Status:** Ready for phase discussion/planning
+**Inicializado:** 2026-05-04
+**Fase actual:** Fase 1 - Base de Sesión
+**Estado:** Listo para discusión/planificación de fase
 
-## Project Reference
+## Referencia del Proyecto
 
-See: `.planning/PROJECT.md` (updated 2026-05-04)
+Ver: `.planning/PROJECT.md` (actualizado 2026-05-04)
 
-**Core value:** Turn live spoken audio into useful, structured meeting outputs without requiring the user to write notes during the session.
-**Current focus:** Build the live session shell.
+**Valor principal:** Convertir audio hablado en vivo en documentos útiles y estructurados sin que el usuario tenga que tomar apuntes durante la sesión.
+**Foco actual:** Construir la base de sesión en vivo.
 
-## Workflow Notes
+## Notas de Workflow
 
-- GSD artifacts were created manually because `gsd-sdk` was not available in PATH.
-- Research subagents were not spawned in this initialization pass.
-- Next recommended command: `$gsd-ui-phase 1`, then `$gsd-plan-phase 1`.
+- Los artefactos GSD fueron creados manualmente porque `gsd-sdk` no estaba disponible en PATH.
+- No se lanzaron subagentes de investigación durante esta inicialización.
+- Siguiente paso recomendado: `$gsd-ui-phase 1`, luego `$gsd-plan-phase 1`.
 
-## Phase Status
+## Estado de Fases
 
-| Phase | Name | Status |
-|-------|------|--------|
-| 1 | Session Shell | Pending |
-| 2 | Presentation Context | Pending |
-| 3 | Live Transcription | Pending |
-| 4 | Document Intelligence | Pending |
-| 5 | Review and Export | Pending |
+| Fase | Nombre | Estado |
+|------|--------|--------|
+| 1 | Base de Sesión | Pendiente |
+| 2 | Contexto de Presentación | Pendiente |
+| 3 | Transcripción en Vivo | Pendiente |
+| 4 | Inteligencia Documental | Pendiente |
+| 5 | Revisión y Exportación | Pendiente |
