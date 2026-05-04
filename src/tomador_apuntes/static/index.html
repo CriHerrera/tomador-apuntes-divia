@@ -50,6 +50,14 @@
                 <button type="submit" disabled id="presentation-button">Registrar</button>
               </div>
             </form>
+            <form id="presentation-upload-form" class="upload-form">
+              <label for="presentation-file">Subir PDF para extraer texto</label>
+              <div class="input-row">
+                <input id="presentation-file" type="file" accept="application/pdf,.pdf">
+                <button type="submit" disabled id="presentation-upload-button">Subir PDF</button>
+              </div>
+            </form>
+            <p id="presentation-status" class="support-text">Sin PDF cargado.</p>
             <div class="slide-marker">
               <button id="previous-slide" type="button" disabled>Anterior</button>
               <div>
@@ -61,7 +69,18 @@
           </article>
 
           <article class="context-panel">
-            <h2>Estado de transcripción</h2>
+            <h2>Presentadores</h2>
+            <form id="speaker-form">
+              <label for="speaker-name">Nombre de quien habla</label>
+              <div class="input-row">
+                <input id="speaker-name" type="text" placeholder="Ej: Marcela">
+                <button type="submit" disabled id="speaker-button">Marcar</button>
+              </div>
+            </form>
+            <label for="speaker-select" class="speaker-select-label">Hablante activo</label>
+            <select id="speaker-select" disabled>
+              <option value="">Sin presentador</option>
+            </select>
             <dl class="state-list">
               <div>
                 <dt>Captura</dt>
@@ -73,6 +92,11 @@
               </div>
             </dl>
           </article>
+        </section>
+
+        <section class="pdf-text-panel" aria-label="Texto extraído del PDF">
+          <h2>Texto plano de presentación</h2>
+          <pre id="presentation-text">Sube un PDF para extraer su texto.</pre>
         </section>
 
         <section class="transcription-panel" aria-label="Transcripción en vivo">

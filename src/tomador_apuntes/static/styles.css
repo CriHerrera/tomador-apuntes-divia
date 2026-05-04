@@ -18,6 +18,17 @@ input {
   font: inherit;
 }
 
+select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #c6cec8;
+  border-radius: 6px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: #1c2522;
+  font: inherit;
+}
+
 button {
   min-height: 44px;
   border: 0;
@@ -114,6 +125,7 @@ h2 {
 .session-panel,
 .control-surface,
 .context-panel,
+.pdf-text-panel,
 .transcription-panel,
 .event-log-panel {
   border: 1px solid #d8ded9;
@@ -160,15 +172,25 @@ h2 {
 }
 
 .context-panel,
+.pdf-text-panel,
 .transcription-panel,
 .event-log-panel {
   padding: 18px;
 }
 
 .context-panel h2,
+.pdf-text-panel h2,
 .transcription-panel h2,
 .event-log-panel h2 {
   margin-bottom: 16px;
+}
+
+.upload-form {
+  margin-top: 16px;
+}
+
+.speaker-select-label {
+  margin-top: 16px;
 }
 
 .slide-marker {
@@ -213,8 +235,23 @@ h2 {
 }
 
 .transcription-panel,
+.pdf-text-panel,
 .event-log-panel {
   margin-top: 16px;
+}
+
+.pdf-text-panel pre {
+  max-height: 260px;
+  overflow: auto;
+  margin: 0;
+  border: 1px solid #d8ded9;
+  border-radius: 8px;
+  padding: 14px;
+  background: #f8faf7;
+  color: #1c2522;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 0.9rem;
 }
 
 .panel-header {

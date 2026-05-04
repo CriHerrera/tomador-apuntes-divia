@@ -15,9 +15,18 @@ const elements = {
   presentationForm: document.querySelector("#presentation-form"),
   presentationName: document.querySelector("#presentation-name"),
   presentationButton: document.querySelector("#presentation-button"),
+  presentationUploadForm: document.querySelector("#presentation-upload-form"),
+  presentationFile: document.querySelector("#presentation-file"),
+  presentationUploadButton: document.querySelector("#presentation-upload-button"),
+  presentationStatus: document.querySelector("#presentation-status"),
+  presentationText: document.querySelector("#presentation-text"),
   previousSlide: document.querySelector("#previous-slide"),
   nextSlide: document.querySelector("#next-slide"),
   currentSlide: document.querySelector("#current-slide"),
+  speakerForm: document.querySelector("#speaker-form"),
+  speakerName: document.querySelector("#speaker-name"),
+  speakerButton: document.querySelector("#speaker-button"),
+  speakerSelect: document.querySelector("#speaker-select"),
   captureState: document.querySelector("#capture-state"),
   sessionMode: document.querySelector("#session-mode"),
   speechSupport: document.querySelector("#speech-support"),
@@ -58,7 +67,10 @@ function eventLabel(event) {
     sesion_reanudada: "Sesión reanudada",
     sesion_detenida: "Sesión detenida",
     presentacion_actualizada: "Presentación actualizada",
+    presentacion_pdf_cargada: "PDF cargado",
     diapositiva_actualizada: "Diapositiva actualizada",
+    presentador_agregado: "Presentador agregado",
+    presentador_activo: "Presentador activo",
     transcripcion_guardada: "Transcripción guardada",
   };
   return labels[event.type] || event.type;
@@ -121,11 +133,16 @@ function render() {
   elements.resumeButton.disabled = session.status !== "pausada";
   elements.stopButton.disabled = !["creada", "en_vivo", "pausada"].includes(session.status);
   elements.presentationButton.disabled = session.status === "detenida";
+  elements.presentationUploadButton.disabled = session.status === "detenida";
+  elements.speakerButton.disabled = session.status === "detenida";
+  elements.speakerSelect.disabled = session.status === "detenida";
   elements.previousSlide.disabled = !session.presentation_name || session.status === "detenida";
   elements.nextSlide.disabled = !session.presentation_name || session.status === "detenida";
   elements.voiceStartButton.disabled = !SpeechRecognition || voiceActive || session.status !== "en_vivo";
   elements.voiceStopButton.disabled = !SpeechRecognition || !voiceActive;
 
+  renderPresentation(session);
+  renderSpeakers(session);
   renderTranscript(session.transcript_segments || []);
   elements.eventLog.innerHTML = "";
   for (const item of [...session.events].reverse()) {
@@ -140,13 +157,43 @@ function render() {
   }
 }
 
+function renderPresentation(session) {
+  const statusLabels = {
+    sin_presentacion: "Sin PDF cargado.",
+    texto_extraido: "Texto extraído correctamente.",
+    pypdf_no_instalado: "PDF guardado. Falta instalar pypdf para extraer texto.",
+    sin_texto_extraible: "PDF guardado, pero no se encontró texto extraíble.",
+  };
+  elements.presentationStatus.textContent =
+    statusLabels[session.presentation_text_status] || session.presentation_text_status || "Sin PDF cargado.";
+  elements.presentationText.textContent = session.presentation_text || "Sube un PDF para extraer su texto.";
+}
+
+function renderSpeakers(session) {
+  const currentValue = session.active_speaker || "";
+  elements.speakerSelect.innerHTML = "";
+  const emptyOption = document.createElement("option");
+  emptyOption.value = "";
+  emptyOption.textContent = "Sin presentador";
+  elements.speakerSelect.appendChild(emptyOption);
+
+  for (const speaker of session.speakers || []) {
+    const option = document.createElement("option");
+    option.value = speaker;
+    option.textContent = speaker;
+    elements.speakerSelect.appendChild(option);
+  }
+  elements.speakerSelect.value = currentValue;
+}
+
 function renderTranscript(segments) {
   elements.transcriptList.innerHTML = "";
   for (const segment of [...segments].reverse()) {
     const li = document.createElement("li");
     const meta = document.createElement("span");
     const slideText = segment.slide ? `Diapositiva ${segment.slide}` : "Sin presentación";
-    meta.textContent = `${formatSeconds(segment.started_at_seconds)} - ${formatSeconds(segment.ended_at_seconds)} · ${slideText}`;
+    const speakerText = segment.speaker_name || "Sin presentador";
+    meta.textContent = `${formatSeconds(segment.started_at_seconds)} - ${formatSeconds(segment.ended_at_seconds)} · ${slideText} · ${speakerText}`;
     li.appendChild(meta);
     li.append(document.createTextNode(segment.text));
     elements.transcriptList.appendChild(li);
@@ -243,6 +290,30 @@ elements.voiceStopButton.addEventListener("click", stopVoice);
 elements.presentationForm.addEventListener("submit", (event) => {
   event.preventDefault();
   runAction("presentation", { presentation_name: elements.presentationName.value });
+});
+elements.presentationUploadForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!state.session || elements.presentationFile.files.length === 0) return;
+  const formData = new FormData();
+  formData.append("file", elements.presentationFile.files[0]);
+  const response = await fetch(`/api/sessions/${state.session.id}/presentation-file`, {
+    method: "POST",
+    body: formData,
+  });
+  const payload = await response.json();
+  if (!response.ok) {
+    elements.presentationStatus.textContent = payload.error || "No se pudo subir el PDF.";
+    return;
+  }
+  setSession(payload.session);
+});
+elements.speakerForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  runAction("speakers", { name: elements.speakerName.value });
+  elements.speakerName.value = "";
+});
+elements.speakerSelect.addEventListener("change", () => {
+  runAction("active-speaker", { name: elements.speakerSelect.value });
 });
 elements.previousSlide.addEventListener("click", () => {
   const current = state.session?.current_slide || 1;

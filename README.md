@@ -36,6 +36,13 @@ La base de sesión ya existe. El foco actual es probar voz real desde el navegad
 Requisitos:
 
 - Python 3.11 o superior.
+- `pypdf` para extraer texto desde PDF.
+
+Instalar dependencia:
+
+```powershell
+& "C:\Users\cristian.herrera\AppData\Local\Programs\Python\Python314\python.exe" -m pip install pypdf
+```
 
 Comando:
 
@@ -70,11 +77,13 @@ Flujo recomendado:
 1. Crea una sesión.
 2. Presiona `Iniciar`.
 3. Opcionalmente registra una presentación, por ejemplo `clase.pdf`.
-4. Presiona `Activar voz`.
-5. Acepta el permiso de micrófono del navegador.
-6. Habla en español.
-7. Cambia de diapositiva con los botones o con las flechas izquierda/derecha.
-8. Revisa los segmentos guardados en la sección `Transcripción en vivo`.
+4. Opcionalmente sube un PDF para extraer texto plano.
+5. Agrega el nombre del presentador que está hablando y márcalo como activo.
+6. Presiona `Activar voz`.
+7. Acepta el permiso de micrófono del navegador.
+8. Habla en español.
+9. Cambia de diapositiva con los botones o con las flechas izquierda/derecha.
+10. Revisa los segmentos guardados en la sección `Transcripción en vivo`.
 
 Los segmentos se guardan automáticamente en:
 
@@ -83,6 +92,25 @@ data/sessions.json
 ```
 
 Cada segmento conserva texto, tiempo relativo de inicio/fin y diapositiva activa si corresponde.
+También conserva el nombre del presentador activo cuando fue marcado.
+
+## PDFs y Presentadores
+
+La app permite subir un PDF dentro de la sesión. El archivo se guarda en:
+
+```text
+uploads/<id-de-sesion>/
+```
+
+Si `pypdf` está instalado, se extrae texto plano y se muestra en la interfaz. Ese texto queda guardado dentro de `data/sessions.json` para que luego pueda usarse al generar apuntes.
+
+Para sesiones con más de un presentador:
+
+1. Escribe el nombre de quien está hablando.
+2. Presiona `Marcar`.
+3. Cambia el hablante activo cuando otra persona tome la palabra.
+
+Los nuevos segmentos de transcripción quedan etiquetados con ese presentador.
 
 ## Pruebas
 

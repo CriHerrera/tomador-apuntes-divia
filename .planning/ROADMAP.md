@@ -5,13 +5,13 @@
 
 ## Resumen
 
-5 fases | 22 requisitos v1 mapeados | Todos los requisitos v1 cubiertos
+5 fases | 27 requisitos v1 mapeados | Todos los requisitos v1 cubiertos
 
 | # | Fase | Objetivo | Requisitos |
 |---|------|----------|------------|
 | 1 | Base de Sesión | El usuario puede ejecutar una sesión en vivo básica con controles claros | SESS-01, SESS-02, SESS-03, SESS-04 |
-| 2 | Contexto de Presentación | El usuario puede cargar PDF/PPTX y marcar manualmente la diapositiva activa | PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06 |
-| 3 | Transcripción en Vivo | El sistema captura audio, lo transcribe en vivo y guarda segmentos con marcas de tiempo | TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05 |
+| 2 | Contexto de Presentación | El usuario puede cargar PDF/PPTX, extraer texto de PDF, marcar diapositiva activa y marcar presentador activo | PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06, PRES-07, PRES-08, SPKR-01, SPKR-02 |
+| 3 | Transcripción en Vivo | El sistema captura audio, lo transcribe en vivo y guarda segmentos con marcas de tiempo y presentador activo | TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05, SPKR-03 |
 | 4 | Inteligencia de Apuntes | El sistema genera apuntes contextualizados desde transcripción y contexto de diapositivas | NOTE-01, NOTE-02, NOTE-03, NOTE-04 |
 | 5 | Revisión y Exportación | El usuario puede revisar y exportar transcripción/subtítulos y apuntes/resumen por separado | EXPT-01, EXPT-02, EXPT-03 |
 
@@ -35,13 +35,15 @@
 
 **Objetivo:** Agregar carga de presentación y el flujo manual de señalización de diapositiva con baja fricción.
 
-**Requisitos:** PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06
+**Requisitos:** PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06, PRES-07, PRES-08, SPKR-01, SPKR-02
 
 **Criterios de éxito:**
 1. El usuario puede cargar archivos PDF y PPTX.
 2. El usuario puede revisar diapositivas mediante miniaturas o lista.
 3. El usuario puede marcar rápidamente la diapositiva activa con controles y atajos de teclado.
 4. Cada cambio de diapositiva queda registrado con marca de tiempo.
+5. El usuario puede extraer y revisar texto plano desde un PDF.
+6. El usuario puede agregar presentadores y marcar quién está hablando.
 
 **UI hint:** yes
 
@@ -49,7 +51,7 @@
 
 **Objetivo:** Capturar audio del micrófono y convertirlo en transcripción/subtítulos en vivo con marcas de tiempo.
 
-**Requisitos:** TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05
+**Requisitos:** TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05, SPKR-03
 
 **Criterios de éxito:**
 1. El usuario concede permiso de micrófono y la captura de audio inicia de forma confiable.
@@ -57,6 +59,7 @@
 3. Los segmentos de transcripción persisten con marcas de tiempo.
 4. Los segmentos se vinculan a la diapositiva activa cuando existe presentación.
 5. Los segmentos se agrupan por rango de tiempo cuando no existe presentación.
+6. Los segmentos guardan el presentador activo cuando existe.
 
 **UI hint:** yes
 
@@ -89,7 +92,7 @@
 
 ## Validación de Cobertura
 
-Los 22 requisitos v1 están mapeados exactamente a una fase.
+Los 27 requisitos v1 están mapeados exactamente a una fase.
 
 ---
 *Última actualización: 2026-05-04 después de crear el roadmap*

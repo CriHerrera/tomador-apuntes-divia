@@ -20,7 +20,9 @@ Convertir audio hablado en vivo en documentos útiles y estructurados sin que el
 
 - [ ] El usuario puede iniciar una sesión en vivo que captura audio del micrófono.
 - [ ] El usuario puede cargar una presentación PDF o PPTX antes o durante una sesión.
+- [ ] El sistema puede leer PDFs y convertirlos a texto plano para usarlos como contexto.
 - [ ] El usuario puede señalizar rápidamente qué diapositiva está tratando el presentador.
+- [ ] El usuario puede marcar qué presentador está hablando cuando hay más de una persona.
 - [ ] El sistema puede funcionar sin presentación y aun así generar transcripción y apuntes.
 - [ ] El sistema puede generar dos documentos separados: transcripción/subtítulos y apuntes/resumen.
 - [ ] Cuando hay diapositivas, los apuntes y resúmenes se contextualizan por diapositiva.
@@ -54,6 +56,8 @@ La interacción para marcar diapositivas debe tener muy baja fricción. Controle
 ## Restricciones
 
 - **Entrada de presentación**: v1 debe soportar PDF y PPTX porque ambos fueron pedidos explícitamente.
+- **Texto de PDF**: los PDFs deben convertirse a texto plano cuando sea técnicamente posible para alimentar apuntes contextualizados.
+- **Presentadores**: el hablante activo se marca manualmente para mantener control y evitar errores de diarización automática temprana.
 - **Primero en vivo**: v1 debe priorizar captura de audio en vivo y señalización contextual en vivo; el procesamiento post-evento puede reutilizar la misma arquitectura después.
 - **Modo sin presentación**: v1 no puede asumir que existe una presentación; transcripción y apuntes para reuniones normales son obligatorios.
 - **Documentos separados**: las salidas deben generarse como dos artefactos distintos: transcripción/subtítulos y apuntes/resumen.
@@ -65,7 +69,9 @@ La interacción para marcar diapositivas debe tener muy baja fricción. Controle
 |----------|--------------|-----------|
 | Construir primero el flujo en vivo, con arquitectura compatible con post-evento | El usuario quiere audio y contexto de diapositivas durante la sesión; post-evento es útil pero secundario | - Pendiente |
 | Soportar carga de PDF y PPTX | El usuario pidió explícitamente ambos formatos | - Pendiente |
+| Extraer texto plano desde PDF | El texto de la presentación ayuda a contextualizar la transcripción | - Pendiente |
 | El usuario señaliza manualmente la diapositiva actual en v1 | Es la forma más confiable de alinear habla y contexto de diapositiva rápidamente | - Pendiente |
+| El usuario marca el presentador activo | Facilita apuntes y futuras actas cuando habla más de una persona | - Pendiente |
 | Soportar sesiones sin presentación | El usuario indicó explícitamente que la herramienta debe servir para reuniones normales | - Pendiente |
 | Generar dos documentos separados | El usuario quiere transcripción/subtítulos y apuntes/resumen; el acta queda a cargo del usuario | - Pendiente |
 | Sacar acta formal del alcance | El usuario hará la generación de acta por su cuenta | - Pendiente |

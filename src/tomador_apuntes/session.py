@@ -63,6 +63,7 @@ class TranscriptSegment:
     ended_at_seconds: float
     recorded_at: datetime
     slide: int | None = None
+    speaker_name: str | None = None
 
     @classmethod
     def create(
@@ -71,6 +72,7 @@ class TranscriptSegment:
         started_at_seconds: float,
         ended_at_seconds: float,
         slide: int | None = None,
+        speaker_name: str | None = None,
         recorded_at: datetime | None = None,
     ) -> "TranscriptSegment":
         clean_text = text.strip()
@@ -85,6 +87,7 @@ class TranscriptSegment:
             ended_at_seconds=max(0, ended_at_seconds),
             recorded_at=recorded_at or utc_now(),
             slide=slide,
+            speaker_name=(speaker_name or "").strip() or None,
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -95,6 +98,7 @@ class TranscriptSegment:
             "ended_at_seconds": self.ended_at_seconds,
             "recorded_at": format_dt(self.recorded_at),
             "slide": self.slide,
+            "speaker_name": self.speaker_name,
         }
 
     @classmethod
@@ -106,6 +110,7 @@ class TranscriptSegment:
             ended_at_seconds=float(data.get("ended_at_seconds", 0)),
             recorded_at=parse_dt(data.get("recorded_at")) or utc_now(),
             slide=data.get("slide"),
+            speaker_name=data.get("speaker_name"),
         )
 
 
@@ -120,7 +125,12 @@ class Session:
     accumulated_seconds: float = 0
     last_started_at: datetime | None = None
     presentation_name: str | None = None
+    presentation_file: str | None = None
+    presentation_text: str = ""
+    presentation_text_status: str = "sin_presentacion"
     current_slide: int | None = None
+    speakers: list[str] = field(default_factory=list)
+    active_speaker: str | None = None
     transcription_state: str = "pendiente"
     events: list[SessionEvent] = field(default_factory=list)
     transcript_segments: list[TranscriptSegment] = field(default_factory=list)
@@ -197,11 +207,52 @@ class Session:
         detail = clean_name or "sin presentacion"
         self.add_event("presentacion_actualizada", now or utc_now(), detail)
 
+    def set_presentation_file(
+        self,
+        filename: str,
+        extracted_text: str,
+        extraction_status: str,
+        now: datetime | None = None,
+    ) -> None:
+        clean_name = filename.strip()
+        if not clean_name:
+            raise ValueError("El nombre del archivo de presentacion no puede estar vacio.")
+        self.presentation_name = clean_name
+        self.presentation_file = clean_name
+        self.presentation_text = extracted_text
+        self.presentation_text_status = extraction_status
+        self.current_slide = 1
+        self.add_event("presentacion_pdf_cargada", now or utc_now(), extraction_status)
+
     def set_current_slide(self, slide: int, now: datetime | None = None) -> None:
         if slide < 1:
             raise ValueError("La diapositiva debe ser mayor o igual a 1.")
         self.current_slide = slide
         self.add_event("diapositiva_actualizada", now or utc_now(), str(slide))
+
+    def add_speaker(self, name: str, now: datetime | None = None) -> str:
+        clean_name = name.strip()
+        if not clean_name:
+            raise ValueError("El nombre del presentador no puede estar vacio.")
+        existing = {speaker.lower(): speaker for speaker in self.speakers}
+        speaker = existing.get(clean_name.lower(), clean_name)
+        if speaker not in self.speakers:
+            self.speakers.append(speaker)
+            self.add_event("presentador_agregado", now or utc_now(), speaker)
+        self.active_speaker = speaker
+        self.add_event("presentador_activo", now or utc_now(), speaker)
+        return speaker
+
+    def set_active_speaker(self, name: str | None, now: datetime | None = None) -> None:
+        clean_name = (name or "").strip()
+        if not clean_name:
+            self.active_speaker = None
+            self.add_event("presentador_activo", now or utc_now(), "sin presentador")
+            return
+        if clean_name not in self.speakers:
+            self.speakers.append(clean_name)
+        self.active_speaker = clean_name
+        self.add_event("presentador_activo", now or utc_now(), clean_name)
 
     def add_transcript_segment(
         self,
@@ -215,6 +266,7 @@ class Session:
             started_at_seconds=started_at_seconds,
             ended_at_seconds=ended_at_seconds,
             slide=self.current_slide,
+            speaker_name=self.active_speaker,
             recorded_at=now or utc_now(),
         )
         self.transcript_segments.append(segment)
@@ -235,7 +287,12 @@ class Session:
             "last_started_at": format_dt(self.last_started_at),
             "elapsed_seconds": self.elapsed_seconds(now),
             "presentation_name": self.presentation_name,
+            "presentation_file": self.presentation_file,
+            "presentation_text": self.presentation_text,
+            "presentation_text_status": self.presentation_text_status,
             "current_slide": self.current_slide,
+            "speakers": self.speakers,
+            "active_speaker": self.active_speaker,
             "transcription_state": self.transcription_state,
             "events": [event.to_dict() for event in self.events],
             "transcript_segments": [segment.to_dict() for segment in self.transcript_segments],
@@ -253,7 +310,12 @@ class Session:
             accumulated_seconds=float(data.get("accumulated_seconds", 0)),
             last_started_at=parse_dt(data.get("last_started_at")),
             presentation_name=data.get("presentation_name"),
+            presentation_file=data.get("presentation_file"),
+            presentation_text=str(data.get("presentation_text", "")),
+            presentation_text_status=str(data.get("presentation_text_status", "sin_presentacion")),
             current_slide=data.get("current_slide"),
+            speakers=[str(item) for item in data.get("speakers", [])],
+            active_speaker=data.get("active_speaker"),
             transcription_state=str(data.get("transcription_state", "pendiente")),
             events=[SessionEvent.from_dict(item) for item in data.get("events", [])],
             transcript_segments=[

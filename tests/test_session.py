@@ -52,6 +52,7 @@ class SessionTest(unittest.TestCase):
         session = Session.create("Clase")
         session.set_presentation("clase.pdf")
         session.set_current_slide(2)
+        session.add_speaker("Marcela")
 
         segment = session.add_transcript_segment(
             text="este es un punto importante",
@@ -60,6 +61,7 @@ class SessionTest(unittest.TestCase):
         )
 
         self.assertEqual(segment.slide, 2)
+        self.assertEqual(segment.speaker_name, "Marcela")
         self.assertEqual(segment.text, "este es un punto importante")
         self.assertEqual(session.transcription_state, "capturando")
         self.assertEqual(session.transcript_segments[0].id, segment.id)
@@ -69,6 +71,27 @@ class SessionTest(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "transcripcion"):
             session.add_transcript_segment("", 0, 1)
+
+    def test_session_tracks_active_speaker(self) -> None:
+        session = Session.create("Panel")
+
+        session.add_speaker("Marcela")
+        session.add_speaker("Cristian")
+        session.set_active_speaker("Marcela")
+
+        self.assertEqual(session.speakers, ["Marcela", "Cristian"])
+        self.assertEqual(session.active_speaker, "Marcela")
+
+    def test_session_stores_presentation_text(self) -> None:
+        session = Session.create("Clase")
+
+        session.set_presentation_file("clase.pdf", "[Pagina 1]\nTexto", "texto_extraido")
+
+        self.assertEqual(session.presentation_name, "clase.pdf")
+        self.assertEqual(session.presentation_file, "clase.pdf")
+        self.assertEqual(session.presentation_text, "[Pagina 1]\nTexto")
+        self.assertEqual(session.presentation_text_status, "texto_extraido")
+        self.assertEqual(session.current_slide, 1)
 
 
 if __name__ == "__main__":

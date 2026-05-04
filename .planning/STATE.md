@@ -17,6 +17,8 @@ Ver: `.planning/PROJECT.md` (actualizado 2026-05-04)
 - No se lanzaron subagentes de investigación durante esta inicialización.
 - Base de sesión implementada en Python estándar y UI web local.
 - Transcripción en vivo inicial implementada con Web Speech API del navegador.
+- Carga de PDF y extracción a texto plano en progreso.
+- Marcado manual de presentador activo en progreso.
 - Siguiente paso recomendado: mejorar persistencia/exportación de transcripción y avanzar a apuntes contextualizados.
 
 ## Estado de Fases

@@ -20,6 +20,14 @@
 - [ ] **PRES-04**: El usuario puede marcar la diapositiva actual con un control de baja fricción.
 - [ ] **PRES-05**: El usuario puede avanzar o retroceder diapositivas con atajos de teclado o controles prominentes.
 - [ ] **PRES-06**: El sistema registra marcas de tiempo para cada cambio de diapositiva durante la sesión.
+- [ ] **PRES-07**: El sistema puede extraer texto plano desde un PDF cargado.
+- [ ] **PRES-08**: El usuario puede revisar el texto plano extraído del PDF.
+
+### Presentadores
+
+- [ ] **SPKR-01**: El usuario puede agregar nombres de presentadores durante una sesión.
+- [ ] **SPKR-02**: El usuario puede marcar cuál presentador está hablando actualmente.
+- [ ] **SPKR-03**: Los segmentos de transcripción guardan el presentador activo cuando existe.
 
 ### Transcripción en Vivo
 
@@ -79,6 +87,11 @@
 | PRES-04 | Fase 2 | Pendiente |
 | PRES-05 | Fase 2 | Pendiente |
 | PRES-06 | Fase 2 | Pendiente |
+| PRES-07 | Fase 2 | Pendiente |
+| PRES-08 | Fase 2 | Pendiente |
+| SPKR-01 | Fase 2 | Pendiente |
+| SPKR-02 | Fase 2 | Pendiente |
+| SPKR-03 | Fase 3 | Pendiente |
 | TRNS-01 | Fase 3 | Pendiente |
 | TRNS-02 | Fase 3 | Pendiente |
 | TRNS-03 | Fase 3 | Pendiente |
@@ -93,8 +106,8 @@
 | EXPT-03 | Fase 5 | Pendiente |
 
 **Cobertura:**
-- Requisitos v1: 22 en total
-- Mapeados a fases: 22
+- Requisitos v1: 27 en total
+- Mapeados a fases: 27
 - Sin mapear: 0
 
 ---

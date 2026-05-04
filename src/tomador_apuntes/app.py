@@ -8,12 +8,14 @@ import argparse
 import json
 import mimetypes
 
+from tomador_apuntes.presentation import parse_multipart_file, save_and_extract_pdf
 from tomador_apuntes.session import SessionStore
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 DATA_DIR = PROJECT_ROOT / "data"
+UPLOAD_DIR = PROJECT_ROOT / "uploads"
 SESSION_STORE_PATH = DATA_DIR / "sessions.json"
 
 
@@ -36,6 +38,10 @@ class AppHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
+        if parsed.path.startswith("/api/sessions/") and parsed.path.endswith("/presentation-file"):
+            self._handle_presentation_upload(parsed.path)
+            return
+
         try:
             payload = self._read_json()
         except json.JSONDecodeError:
@@ -74,6 +80,10 @@ class AppHandler(SimpleHTTPRequestHandler):
                 session.set_presentation(payload.get("presentation_name"))
             elif action == "slide":
                 session.set_current_slide(int(payload.get("slide", 1)))
+            elif action == "speakers":
+                session.add_speaker(str(payload.get("name", "")))
+            elif action == "active-speaker":
+                session.set_active_speaker(payload.get("name"))
             elif action == "transcript":
                 session.add_transcript_segment(
                     text=str(payload.get("text", "")),
@@ -88,6 +98,34 @@ class AppHandler(SimpleHTTPRequestHandler):
             self.send_error(HTTPStatus.NOT_FOUND, "Sesion no encontrada")
             return
         except (TypeError, ValueError) as exc:
+            self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+            return
+
+        self._send_json({"session": session.to_dict()})
+
+    def _handle_presentation_upload(self, path: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) != 4 or parts[0] != "api" or parts[1] != "sessions":
+            self.send_error(HTTPStatus.NOT_FOUND, "Ruta no encontrada")
+            return
+        content_type = self.headers.get("Content-Type", "")
+        content_length = int(self.headers.get("Content-Length", "0") or "0")
+        body = self.rfile.read(content_length)
+
+        try:
+            session = self.store.get(parts[2])
+            upload = parse_multipart_file(content_type, body)
+            extracted = save_and_extract_pdf(upload, UPLOAD_DIR / session.id)
+            session.set_presentation_file(
+                filename=extracted.filename,
+                extracted_text=extracted.text,
+                extraction_status=extracted.status,
+            )
+            self.store.save(session)
+        except KeyError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Sesion no encontrada")
+            return
+        except ValueError as exc:
             self._send_json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
             return
 
