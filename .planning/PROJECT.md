@@ -4,7 +4,7 @@
 
 Tomador Apuntes Divia es un asistente en vivo para reuniones y presentaciones. Escucha el audio del presentador o de la reunión, genera subtítulos/transcripción y usa una presentación PDF/PPTX como contexto cuando existe.
 
-La herramienta también debe funcionar sin presentación, para que pueda producir actas útiles de reuniones normales solo con audio. Cuando hay presentación, el usuario señaliza manualmente la diapositiva activa de la forma más rápida posible para conectar lo que se dice con el contexto correcto.
+La herramienta también debe funcionar sin presentación, para que pueda producir transcripción y apuntes útiles de reuniones normales solo con audio. Cuando hay presentación, el usuario señaliza manualmente la diapositiva activa de la forma más rápida posible para conectar lo que se dice con el contexto correcto.
 
 ## Valor Principal
 
@@ -21,8 +21,8 @@ Convertir audio hablado en vivo en documentos útiles y estructurados sin que el
 - [ ] El usuario puede iniciar una sesión en vivo que captura audio del micrófono.
 - [ ] El usuario puede cargar una presentación PDF o PPTX antes o durante una sesión.
 - [ ] El usuario puede señalizar rápidamente qué diapositiva está tratando el presentador.
-- [ ] El sistema puede funcionar sin presentación y aun así generar un acta de reunión.
-- [ ] El sistema puede generar tres documentos separados: transcripción/subtítulos, acta formal y apuntes/resumen.
+- [ ] El sistema puede funcionar sin presentación y aun así generar transcripción y apuntes.
+- [ ] El sistema puede generar dos documentos separados: transcripción/subtítulos y apuntes/resumen.
 - [ ] Cuando hay diapositivas, los apuntes y resúmenes se contextualizan por diapositiva.
 - [ ] El usuario puede exportar los documentos generados al terminar la sesión.
 
@@ -30,7 +30,8 @@ Convertir audio hablado en vivo en documentos útiles y estructurados sin que el
 
 - Detección automática de cambio de diapositiva en v1 - es útil después, pero la señalización manual es el camino más confiable para el MVP.
 - Análisis completo de video en v1 - audio más contexto de presentación es suficiente para validar el valor principal.
-- Diarización multi-hablante en tiempo real como requisito duro de v1 - las etiquetas de hablante pueden mejorar después de que funcione el flujo básico de acta.
+- Diarización multi-hablante en tiempo real como requisito duro de v1 - las etiquetas de hablante pueden mejorar después de que funcione el flujo básico de transcripción y apuntes.
+- Generación de acta formal - el usuario hará el acta por su cuenta usando la transcripción y los apuntes generados.
 - Aplicaciones móviles nativas en v1 - web o escritorio primero mantiene el alcance enfocado.
 
 ## Contexto
@@ -44,9 +45,8 @@ El flujo crítico es:
 3. La herramienta captura audio en vivo y muestra subtítulos/transcripción.
 4. El usuario marca la diapositiva activa a medida que el presentador avanza.
 5. La herramienta usa el audio más la diapositiva actual para crear salidas estructuradas.
-6. El usuario exporta tres documentos separados:
+6. El usuario exporta dos documentos separados:
    - Transcripción/subtítulos.
-   - Acta formal.
    - Apuntes/resumen por diapositiva o por segmento de reunión.
 
 La interacción para marcar diapositivas debe tener muy baja fricción. Controles candidatos: atajos de teclado, botones anterior/siguiente, ingreso directo de número de diapositiva e indicador visible de diapositiva actual.
@@ -55,8 +55,8 @@ La interacción para marcar diapositivas debe tener muy baja fricción. Controle
 
 - **Entrada de presentación**: v1 debe soportar PDF y PPTX porque ambos fueron pedidos explícitamente.
 - **Primero en vivo**: v1 debe priorizar captura de audio en vivo y señalización contextual en vivo; el procesamiento post-evento puede reutilizar la misma arquitectura después.
-- **Modo sin presentación**: v1 no puede asumir que existe una presentación; la generación de acta para reuniones normales es obligatoria.
-- **Documentos separados**: las salidas deben generarse como tres artefactos distintos: transcripción/subtítulos, acta formal y apuntes/resumen.
+- **Modo sin presentación**: v1 no puede asumir que existe una presentación; transcripción y apuntes para reuniones normales son obligatorios.
+- **Documentos separados**: las salidas deben generarse como dos artefactos distintos: transcripción/subtítulos y apuntes/resumen.
 - **Confiabilidad**: se prefiere señalización manual de diapositiva en v1 porque la detección automática agregaría complejidad frágil de visión/computación.
 
 ## Decisiones Clave
@@ -66,8 +66,9 @@ La interacción para marcar diapositivas debe tener muy baja fricción. Controle
 | Construir primero el flujo en vivo, con arquitectura compatible con post-evento | El usuario quiere audio y contexto de diapositivas durante la sesión; post-evento es útil pero secundario | - Pendiente |
 | Soportar carga de PDF y PPTX | El usuario pidió explícitamente ambos formatos | - Pendiente |
 | El usuario señaliza manualmente la diapositiva actual en v1 | Es la forma más confiable de alinear habla y contexto de diapositiva rápidamente | - Pendiente |
-| Soportar sesiones sin presentación | El usuario indicó explícitamente que el acta debe funcionar para reuniones normales | - Pendiente |
-| Generar tres documentos separados | El usuario quiere transcripción/subtítulos, acta y apuntes/resumen por separado | - Pendiente |
+| Soportar sesiones sin presentación | El usuario indicó explícitamente que la herramienta debe servir para reuniones normales | - Pendiente |
+| Generar dos documentos separados | El usuario quiere transcripción/subtítulos y apuntes/resumen; el acta queda a cargo del usuario | - Pendiente |
+| Sacar acta formal del alcance | El usuario hará la generación de acta por su cuenta | - Pendiente |
 
 ## Evolución
 

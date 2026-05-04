@@ -5,15 +5,15 @@
 
 ## Resumen
 
-5 fases | 27 requisitos v1 mapeados | Todos los requisitos v1 cubiertos
+5 fases | 22 requisitos v1 mapeados | Todos los requisitos v1 cubiertos
 
 | # | Fase | Objetivo | Requisitos |
 |---|------|----------|------------|
 | 1 | Base de Sesión | El usuario puede ejecutar una sesión en vivo básica con controles claros | SESS-01, SESS-02, SESS-03, SESS-04 |
 | 2 | Contexto de Presentación | El usuario puede cargar PDF/PPTX y marcar manualmente la diapositiva activa | PRES-01, PRES-02, PRES-03, PRES-04, PRES-05, PRES-06 |
 | 3 | Transcripción en Vivo | El sistema captura audio, lo transcribe en vivo y guarda segmentos con marcas de tiempo | TRNS-01, TRNS-02, TRNS-03, TRNS-04, TRNS-05 |
-| 4 | Inteligencia Documental | El sistema genera apuntes contextualizados y acta formal desde transcripción y contexto de diapositivas | NOTE-01, NOTE-02, NOTE-03, NOTE-04, ACTA-01, ACTA-02, ACTA-03, ACTA-04 |
-| 5 | Revisión y Exportación | El usuario puede revisar y exportar los tres documentos separados | EXPT-01, EXPT-02, EXPT-03, EXPT-04 |
+| 4 | Inteligencia de Apuntes | El sistema genera apuntes contextualizados desde transcripción y contexto de diapositivas | NOTE-01, NOTE-02, NOTE-03, NOTE-04 |
+| 5 | Revisión y Exportación | El usuario puede revisar y exportar transcripción/subtítulos y apuntes/resumen por separado | EXPT-01, EXPT-02, EXPT-03 |
 
 ## Detalle de Fases
 
@@ -60,38 +60,36 @@
 
 **UI hint:** yes
 
-### Fase 4: Inteligencia Documental
+### Fase 4: Inteligencia de Apuntes
 
-**Objetivo:** Generar las dos salidas estructuradas que requieren interpretación: apuntes/resumen y acta formal.
+**Objetivo:** Generar apuntes/resumen contextualizados desde la transcripción y el contexto de diapositivas o segmentos.
 
-**Requisitos:** NOTE-01, NOTE-02, NOTE-03, NOTE-04, ACTA-01, ACTA-02, ACTA-03, ACTA-04
+**Requisitos:** NOTE-01, NOTE-02, NOTE-03, NOTE-04
 
 **Criterios de éxito:**
 1. Los apuntes se agrupan por diapositiva cuando existe presentación.
 2. Los apuntes se agrupan por segmento de reunión cuando no existe presentación.
 3. Los apuntes incluyen puntos clave, explicaciones, preguntas y seguimientos.
-4. El acta incluye resumen, temas, acuerdos, decisiones, tareas y preguntas abiertas.
-5. El acta referencia números o títulos de diapositivas cuando corresponde.
+4. Los apuntes conservan referencias a diapositivas o rangos de tiempo cuando corresponde.
 
 **UI hint:** yes
 
 ### Fase 5: Revisión y Exportación
 
-**Objetivo:** Permitir que el usuario revise y exporte los tres documentos requeridos por separado.
+**Objetivo:** Permitir que el usuario revise y exporte transcripción/subtítulos y apuntes/resumen por separado.
 
-**Requisitos:** EXPT-01, EXPT-02, EXPT-03, EXPT-04
+**Requisitos:** EXPT-01, EXPT-02, EXPT-03
 
 **Criterios de éxito:**
 1. El usuario puede revisar transcripción/subtítulos antes de exportar.
-2. El usuario puede revisar el acta formal antes de exportar.
-3. El usuario puede revisar apuntes/resumen antes de exportar.
-4. El usuario puede exportar los tres documentos de forma independiente.
+2. El usuario puede revisar apuntes/resumen antes de exportar.
+3. El usuario puede exportar los dos documentos de forma independiente.
 
 **UI hint:** yes
 
 ## Validación de Cobertura
 
-Los 27 requisitos v1 están mapeados exactamente a una fase.
+Los 22 requisitos v1 están mapeados exactamente a una fase.
 
 ---
 *Última actualización: 2026-05-04 después de crear el roadmap*

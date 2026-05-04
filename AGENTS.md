@@ -2,7 +2,7 @@
 
 ## Proyecto
 
-Tomador Apuntes Divia es un asistente en vivo para reuniones y presentaciones. Captura audio, usa opcionalmente diapositivas PDF/PPTX como contexto y genera tres salidas separadas: transcripción/subtítulos, acta formal y apuntes/resumen.
+Tomador Apuntes Divia es un asistente en vivo para reuniones y presentaciones. Captura audio, usa opcionalmente diapositivas PDF/PPTX como contexto y genera dos salidas separadas: transcripción/subtítulos y apuntes/resumen.
 
 ## Contexto GSD
 

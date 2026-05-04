@@ -36,19 +36,11 @@
 - [ ] **NOTE-03**: Los apuntes incluyen puntos importantes, explicaciones, preguntas y seguimientos.
 - [ ] **NOTE-04**: Los apuntes conservan suficiente contexto de diapositiva para explicar por qué un punto pertenece a esa diapositiva.
 
-### Acta Formal
-
-- [ ] **ACTA-01**: El sistema genera un acta formal de reunión a partir de la transcripción de la sesión.
-- [ ] **ACTA-02**: El acta incluye resumen, temas tratados, acuerdos, decisiones, tareas y preguntas abiertas.
-- [ ] **ACTA-03**: El acta funciona con o sin presentación.
-- [ ] **ACTA-04**: El acta referencia números o títulos de diapositivas cuando corresponde.
-
 ### Exportación
 
 - [ ] **EXPT-01**: El usuario puede exportar la transcripción/subtítulos como documento separado.
-- [ ] **EXPT-02**: El usuario puede exportar el acta formal como documento separado.
-- [ ] **EXPT-03**: El usuario puede exportar los apuntes/resumen como documento separado.
-- [ ] **EXPT-04**: El usuario puede revisar los documentos generados antes de exportarlos.
+- [ ] **EXPT-02**: El usuario puede exportar los apuntes/resumen como documento separado.
+- [ ] **EXPT-03**: El usuario puede revisar los documentos generados antes de exportarlos.
 
 ## Requisitos v2
 
@@ -57,13 +49,12 @@
 - **AUTO-01**: El sistema puede detectar automáticamente cambios de diapositiva desde pantalla o estado de presentación.
 - **AUTO-02**: El sistema puede procesar grabaciones post-evento usando el mismo pipeline de documentos.
 - **AUTO-03**: El sistema puede identificar hablantes automáticamente.
-- **AUTO-04**: El sistema puede soportar múltiples plantillas de apuntes simultáneamente.
 
 ### Colaboración
 
 - **COLL-01**: Múltiples usuarios pueden colaborar en la misma sesión.
 - **COLL-02**: El usuario puede compartir documentos generados mediante enlace.
-- **COLL-03**: El usuario puede editar acta y apuntes colaborativamente después de la sesión.
+- **COLL-03**: El usuario puede editar apuntes colaborativamente después de la sesión.
 
 ## Fuera de Alcance
 
@@ -97,18 +88,13 @@
 | NOTE-02 | Fase 4 | Pendiente |
 | NOTE-03 | Fase 4 | Pendiente |
 | NOTE-04 | Fase 4 | Pendiente |
-| ACTA-01 | Fase 4 | Pendiente |
-| ACTA-02 | Fase 4 | Pendiente |
-| ACTA-03 | Fase 4 | Pendiente |
-| ACTA-04 | Fase 4 | Pendiente |
 | EXPT-01 | Fase 5 | Pendiente |
 | EXPT-02 | Fase 5 | Pendiente |
 | EXPT-03 | Fase 5 | Pendiente |
-| EXPT-04 | Fase 5 | Pendiente |
 
 **Cobertura:**
-- Requisitos v1: 27 en total
-- Mapeados a fases: 27
+- Requisitos v1: 22 en total
+- Mapeados a fases: 22
 - Sin mapear: 0
 
 ---

@@ -25,5 +25,5 @@ Ver: `.planning/PROJECT.md` (actualizado 2026-05-04)
 | 1 | Base de Sesión | En progreso |
 | 2 | Contexto de Presentación | Pendiente |
 | 3 | Transcripción en Vivo | Pendiente |
-| 4 | Inteligencia Documental | Pendiente |
+| 4 | Inteligencia de Apuntes | Pendiente |
 | 5 | Revisión y Exportación | Pendiente |
