@@ -8,6 +8,12 @@ import argparse
 import json
 import mimetypes
 
+from tomador_apuntes.export import (
+    download_filename,
+    presentation_text_as_text,
+    transcript_as_json,
+    transcript_as_text,
+)
 from tomador_apuntes.presentation import parse_multipart_file, save_and_extract_pdf
 from tomador_apuntes.session import SessionStore
 
@@ -30,6 +36,15 @@ class AppHandler(SimpleHTTPRequestHandler):
         if parsed.path == "/api/sessions":
             sessions = [session.to_dict() for session in self.store.list_sessions()]
             self._send_json({"sessions": sessions})
+            return
+        if parsed.path.startswith("/api/sessions/") and parsed.path.endswith("/transcript.txt"):
+            self._handle_json_text_download(parsed.path, "transcript")
+            return
+        if parsed.path.startswith("/api/sessions/") and parsed.path.endswith("/transcript.json"):
+            self._handle_json_download(parsed.path, "transcript")
+            return
+        if parsed.path.startswith("/api/sessions/") and parsed.path.endswith("/presentation-text.txt"):
+            self._handle_text_download(parsed.path, "presentation")
             return
         if parsed.path.startswith("/static/"):
             self._send_static(parsed.path.removeprefix("/static/"))
@@ -103,6 +118,65 @@ class AppHandler(SimpleHTTPRequestHandler):
 
         self._send_json({"session": session.to_dict()})
 
+    def _handle_text_download(self, path: str, export_type: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) != 4 or parts[0] != "api" or parts[1] != "sessions":
+            self.send_error(HTTPStatus.NOT_FOUND, "Ruta no encontrada")
+            return
+
+        try:
+            session = self.store.get(parts[2])
+        except KeyError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Sesion no encontrada")
+            return
+
+        if export_type == "transcript":
+            filename = download_filename(session.title, "transcripcion")
+            body = transcript_as_text(session)
+        else:
+            filename = download_filename(session.title, "texto-presentacion")
+            body = presentation_text_as_text(session)
+        self._send_text_download(body, filename)
+
+    def _handle_json_text_download(self, path: str, export_type: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) != 4 or parts[0] != "api" or parts[1] != "sessions":
+            self.send_error(HTTPStatus.NOT_FOUND, "Ruta no encontrada")
+            return
+
+        try:
+            session = self.store.get(parts[2])
+        except KeyError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Sesion no encontrada")
+            return
+
+        if export_type != "transcript":
+            self.send_error(HTTPStatus.NOT_FOUND, "Exportacion no encontrada")
+            return
+
+        filename = download_filename(session.title, "transcripcion-json")
+        body = json.dumps(transcript_as_json(session), ensure_ascii=False, indent=2)
+        self._send_text_download(body + "\n", filename)
+
+    def _handle_json_download(self, path: str, export_type: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) != 4 or parts[0] != "api" or parts[1] != "sessions":
+            self.send_error(HTTPStatus.NOT_FOUND, "Ruta no encontrada")
+            return
+
+        try:
+            session = self.store.get(parts[2])
+        except KeyError:
+            self.send_error(HTTPStatus.NOT_FOUND, "Sesion no encontrada")
+            return
+
+        if export_type != "transcript":
+            self.send_error(HTTPStatus.NOT_FOUND, "Exportacion no encontrada")
+            return
+
+        filename = download_filename(session.title, "transcripcion", "json")
+        self._send_json_download(transcript_as_json(session), filename)
+
     def _handle_presentation_upload(self, path: str) -> None:
         parts = path.strip("/").split("/")
         if len(parts) != 4 or parts[0] != "api" or parts[1] != "sessions":
@@ -142,6 +216,24 @@ class AppHandler(SimpleHTTPRequestHandler):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_text_download(self, content: str, filename: str) -> None:
+        body = content.encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_json_download(self, payload: dict, filename: str) -> None:
+        body = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)

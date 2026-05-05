@@ -32,6 +32,8 @@ const elements = {
   speechSupport: document.querySelector("#speech-support"),
   voiceStartButton: document.querySelector("#voice-start-button"),
   voiceStopButton: document.querySelector("#voice-stop-button"),
+  transcriptDownloadButton: document.querySelector("#transcript-download-button"),
+  presentationTextDownloadButton: document.querySelector("#presentation-text-download-button"),
   liveSubtitle: document.querySelector("#live-subtitle"),
   transcriptList: document.querySelector("#transcript-list"),
   eventLog: document.querySelector("#event-log"),
@@ -140,6 +142,8 @@ function render() {
   elements.nextSlide.disabled = !session.presentation_name || session.status === "detenida";
   elements.voiceStartButton.disabled = !SpeechRecognition || voiceActive || session.status !== "en_vivo";
   elements.voiceStopButton.disabled = !SpeechRecognition || !voiceActive;
+  elements.transcriptDownloadButton.disabled = (session.transcript_segments || []).length === 0;
+  elements.presentationTextDownloadButton.disabled = !session.presentation_text;
 
   renderPresentation(session);
   renderSpeakers(session);
@@ -280,6 +284,15 @@ function stopVoice() {
   render();
 }
 
+function downloadSessionText(kind) {
+  if (!state.session) return;
+  const filenames = {
+    transcript: "transcript.txt",
+    presentation: "presentation-text.txt",
+  };
+  window.location.href = `/api/sessions/${state.session.id}/${filenames[kind]}`;
+}
+
 elements.createForm.addEventListener("submit", createSession);
 elements.startButton.addEventListener("click", () => runAction("start"));
 elements.pauseButton.addEventListener("click", () => runAction("pause"));
@@ -287,6 +300,8 @@ elements.resumeButton.addEventListener("click", () => runAction("resume"));
 elements.stopButton.addEventListener("click", () => runAction("stop"));
 elements.voiceStartButton.addEventListener("click", startVoice);
 elements.voiceStopButton.addEventListener("click", stopVoice);
+elements.transcriptDownloadButton.addEventListener("click", () => downloadSessionText("transcript"));
+elements.presentationTextDownloadButton.addEventListener("click", () => downloadSessionText("presentation"));
 elements.presentationForm.addEventListener("submit", (event) => {
   event.preventDefault();
   runAction("presentation", { presentation_name: elements.presentationName.value });

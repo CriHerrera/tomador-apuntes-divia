@@ -9,8 +9,13 @@
   <body>
     <main class="app-shell">
       <section class="workspace">
+        <div class="gov-strip" aria-hidden="true">
+          <span class="strip-blue"></span>
+          <span class="strip-red"></span>
+        </div>
         <header class="topbar">
           <div>
+            <p class="ministry-label">Ministerio de Educación</p>
             <p class="eyebrow">Sesión en vivo</p>
             <h1>Tomador Apuntes Divia</h1>
           </div>
@@ -95,7 +100,10 @@
         </section>
 
         <section class="pdf-text-panel" aria-label="Texto extraído del PDF">
-          <h2>Texto plano de presentación</h2>
+          <div class="panel-header">
+            <h2>Texto plano de presentación</h2>
+            <button id="presentation-text-download-button" type="button" disabled>Descargar TXT</button>
+          </div>
           <pre id="presentation-text">Sube un PDF para extraer su texto.</pre>
         </section>
 
@@ -106,6 +114,7 @@
               <p id="speech-support" class="support-text">Preparando reconocimiento de voz...</p>
             </div>
             <div class="voice-controls">
+              <button id="transcript-download-button" type="button" disabled>Descargar TXT JSON</button>
               <button id="voice-start-button" type="button" disabled>Activar voz</button>
               <button id="voice-stop-button" type="button" disabled>Detener voz</button>
             </div>
